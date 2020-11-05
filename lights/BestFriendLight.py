@@ -54,7 +54,7 @@ class BestFriendLight(object):
     if current_color_index != self._color_index:
       # set to the color index right before the current color index, so when we switch colors,
       # we light up the correct color. protect against invalid color indexes
-      self._color_index = (self._color_index + len(self._colors) - 1) % len(self._colors)
+      self._color_index = (current_color_index + len(self._colors) - 1) % len(self._colors)
       print("middle self._color_index " + str(self._color_index))
       self.switch_to_next_color()
 
