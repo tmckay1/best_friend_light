@@ -7,7 +7,8 @@ class ColorRepository(object):
   def get_current_color(self, current_color_index):
     try:
       response = requests.get(self._base_url + "/get_color_index/").json()
-      return response["color_index"]
+      print("got color " + str(response["color_index"]))
+      return int(response["color_index"])
     except Error:
       print("Error getting current color")
       return current_color_index
