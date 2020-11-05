@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 
 from repositories.ColorRepository import ColorRepository
+import time
 
 # run the best friend light program
 class BestFriendLight(object):
@@ -43,6 +44,7 @@ class BestFriendLight(object):
       # then check if the other person changed the color
       # TODO: add a buffer to do this every X seconds instead of every iteration of the loop
       self.check_for_new_color()
+      time.sleep(5)
 
   def check_for_new_color(self):
     current_color_index = self._color_repository.get_current_color(self._color_index)
