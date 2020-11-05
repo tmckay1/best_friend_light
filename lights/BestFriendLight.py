@@ -23,6 +23,10 @@ class BestFriendLight(object):
     self._led_controller = led_controller
     self._colors = colors
     self._push_button_pin = push_button_pin
+    GPIO.setwarnings(False) # Ignore warning for now
+    GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
+    GPIO.setup(self._push_button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
+
 
   def run(self):
     while True:
