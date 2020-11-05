@@ -26,14 +26,14 @@ class BestFriendLight(object):
 
   def run(self):
     while True:
-      switched_high = GPIO.input(pin) == GPIO.HIGH and self._last_state != GPIO.HIGH
-      switched_low = GPIO.input(pin) == GPIO.LOW and self._last_state != GPIO.LOW
+      switched_high = GPIO.input(self._push_button_pin) == GPIO.HIGH and self._last_state != GPIO.HIGH
+      switched_low = GPIO.input(self._push_button_pin) == GPIO.LOW and self._last_state != GPIO.LOW
 
       # as long as we did on or the other, change the color
       if switched_low or switched_high:
         switch_colors()
 
-      self._last_state = GPIO.input(pin)
+      self._last_state = GPIO.input(self._push_button_pin)
 
   def switch_colors(self):
     self._led_controller.turn_on_color(self._colors[self._color_index])
