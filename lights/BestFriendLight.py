@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 
 from repositories.ColorRepository import ColorRepository
+from threading import Thread
 import time
 
 # run the best friend light program
@@ -24,6 +25,9 @@ class BestFriendLight(object):
   # the repository used to change and retrieve the latest color
   _color_repository = None
 
+  # whether or not we are actively requesting a color
+  _currently_requesting_color = False
+
   def __init__(self, led_controller, colors, push_button_pin):
     super(object, self).__init__()
     self._led_controller = led_controller
@@ -42,9 +46,10 @@ class BestFriendLight(object):
       # first check if the user pressed the button
       self.check_for_user_input()
       # then check if the other person changed the color
-      # TODO: add a buffer to do this every X seconds instead of every iteration of the loop
-      self.check_for_new_color()
-      time.sleep(5)
+      if !self._currently_requesting_color:
+        self._currently_requesting_color = True
+        thread = Thread(target = self.check_for_new_color)
+        thread.start()
 
   def check_for_new_color(self):
     current_color_index = self._color_repository.get_current_color(self._color_index)
@@ -58,6 +63,8 @@ class BestFriendLight(object):
       print("middle self._color_index " + str(self._color_index))
       self.switch_to_next_color()
 
+    time.sleep(5)
+    self._currently_requesting_color = False
     print("after self._color_index " + str(self._color_index))
 
   def check_for_user_input(self):
