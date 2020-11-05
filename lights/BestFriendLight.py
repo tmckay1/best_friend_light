@@ -30,14 +30,24 @@ class BestFriendLight(object):
 
   def run(self):
     while True:
-      switched_high = GPIO.input(self._push_button_pin) == GPIO.HIGH and self._last_state != GPIO.HIGH
-      switched_low = GPIO.input(self._push_button_pin) == GPIO.LOW and self._last_state != GPIO.LOW
+      # first check if the user pressed the button
+      self.check_for_user_input()
+      # then check if the other person changed the color
+      self.check_for_new_color()
 
-      # as long as we did on or the other, change the color
-      if switched_low or switched_high:
-        self.switch_colors()
+  def check_for_new_color(self):
+    pass
 
-      self._last_state = GPIO.input(self._push_button_pin)
+  def check_for_user_input(self):
+    # first check if we changed the color
+    switched_high = GPIO.input(self._push_button_pin) == GPIO.HIGH and self._last_state != GPIO.HIGH
+    switched_low = GPIO.input(self._push_button_pin) == GPIO.LOW and self._last_state != GPIO.LOW
+
+    # as long as we did on or the other, change the color
+    if switched_low or switched_high:
+      self.switch_colors()
+
+    self._last_state = GPIO.input(self._push_button_pin)
 
   def switch_colors(self):
     self._led_controller.turn_on_color(self._colors[self._color_index])
