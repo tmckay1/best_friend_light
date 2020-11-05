@@ -67,6 +67,7 @@ class BestFriendLight(object):
     # as long as we pressed the button, change the color
     if switched_low or switched_high:
       self.switch_to_next_color()
+      self._color_repository.set_current_color(self._color_index)
 
     self._last_state = GPIO.input(self._push_button_pin)
 
@@ -74,4 +75,3 @@ class BestFriendLight(object):
     print("switch")
     self._color_index = (self._color_index + 1) % len(self._colors)
     self._led_controller.turn_on_color(self._colors[self._color_index])
-    self._color_repository.set_current_color(self._color_index)
