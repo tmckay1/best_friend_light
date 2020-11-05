@@ -46,7 +46,7 @@ class BestFriendLight(object):
       # first check if the user pressed the button
       self.check_for_user_input()
       # then check if the other person changed the color
-      if !self._currently_requesting_color:
+      if not self._currently_requesting_color:
         self._currently_requesting_color = True
         thread = Thread(target = self.check_for_new_color)
         thread.start()
