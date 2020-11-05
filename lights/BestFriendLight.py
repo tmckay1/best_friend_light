@@ -46,6 +46,7 @@ class BestFriendLight(object):
 
   def check_for_new_color(self):
     current_color_index = self._color_repository.get_current_color(self._color_index)
+
     if current_color_index != self._color_index:
       # set to the color index right before the current color index, so when we switch colors,
       # we light up the correct color. protect against invalid color indexes
