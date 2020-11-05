@@ -47,25 +47,23 @@ class BestFriendLight(object):
       self.check_for_user_input()
       # then check if the other person changed the color
       if not self._currently_requesting_color:
+        # open this in a new thread so we don't block the push button check
         self._currently_requesting_color = True
         thread = Thread(target = self.check_for_new_color)
         thread.start()
 
   def check_for_new_color(self):
     current_color_index = self._color_repository.get_current_color(self._color_index)
-    print("current_color_index " + str(current_color_index))
-    print("before self._color_index " + str(self._color_index))
 
     if current_color_index != self._color_index:
       # set to the color index right before the current color index, so when we switch colors,
       # we light up the correct color. protect against invalid color indexes
       self._color_index = (current_color_index + len(self._colors) - 1) % len(self._colors)
-      print("middle self._color_index " + str(self._color_index))
       self.switch_to_next_color()
 
+    # wait 5 seconds between requests
     time.sleep(5)
     self._currently_requesting_color = False
-    print("after self._color_index " + str(self._color_index))
 
   def check_for_user_input(self):
     # first check if we changed the color
@@ -80,6 +78,5 @@ class BestFriendLight(object):
     self._last_state = GPIO.input(self._push_button_pin)
 
   def switch_to_next_color(self):
-    print("switch")
     self._color_index = (self._color_index + 1) % len(self._colors)
     self._led_controller.turn_on_color(self._colors[self._color_index])
