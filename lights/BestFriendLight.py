@@ -31,7 +31,7 @@ class BestFriendLight(object):
 
       # as long as we did on or the other, change the color
       if switched_low or switched_high:
-        switch_colors()
+        self.switch_colors()
 
       self._last_state = GPIO.input(self._push_button_pin)
 
