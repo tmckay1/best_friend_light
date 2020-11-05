@@ -2,8 +2,10 @@ import requests
 
 class ColorRepository(object):
 
-  def get_current_color(self):
-    pass
+  _url = ""
 
-  def change_current_color(self):
+  def get_current_color(self, color_index):
+    return color_index
+
+  def set_current_color(self, color_index):
     pass

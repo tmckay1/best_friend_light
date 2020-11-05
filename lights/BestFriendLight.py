@@ -41,22 +41,29 @@ class BestFriendLight(object):
       # first check if the user pressed the button
       self.check_for_user_input()
       # then check if the other person changed the color
+      # TODO: add a buffer to do this every X seconds instead of every iteration of the loop
       self.check_for_new_color()
 
   def check_for_new_color(self):
-    current_color_index = self._color_repository.get_current_color()
+    current_color_index = self._color_repository.get_current_color(self._color_index)
+    if current_color_index != self._color_index:
+      # set to the color index right before the current color index, so when we switch colors,
+      # we light up the correct color. protect against invalid color indexes
+      self._color_index = (self._color_index + len(self._colors) - 1) % len(self._colors)
+      self.switch_to_next_color()
 
   def check_for_user_input(self):
     # first check if we changed the color
     switched_high = GPIO.input(self._push_button_pin) == GPIO.HIGH and self._last_state != GPIO.HIGH
     switched_low = GPIO.input(self._push_button_pin) == GPIO.LOW and self._last_state != GPIO.LOW
 
-    # as long as we did on or the other, change the color
+    # as long as we pressed the button, change the color
     if switched_low or switched_high:
-      self.switch_colors()
+      self.switch_to_next_color()
 
     self._last_state = GPIO.input(self._push_button_pin)
 
-  def switch_colors(self):
-    self._led_controller.turn_on_color(self._colors[self._color_index])
+  def switch_to_next_color(self):
     self._color_index = (self._color_index + 1) % len(self._colors)
+    self._led_controller.turn_on_color(self._colors[self._color_index])
+    self._color_repository.set_current_color(self._color_index)
