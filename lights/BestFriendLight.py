@@ -1,5 +1,7 @@
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 
+from repositories.ColorRepository import ColorRepository
+
 # run the best friend light program
 class BestFriendLight(object):
 
@@ -18,11 +20,17 @@ class BestFriendLight(object):
   # the last state of the push button pin
   _last_state = GPIO.HIGH
 
+  # the repository used to change and retrieve the latest color
+  _color_repository = None
+
   def __init__(self, led_controller, colors, push_button_pin):
     super(object, self).__init__()
     self._led_controller = led_controller
     self._colors = colors
     self._push_button_pin = push_button_pin
+    self._color_repository = ColorRepository()
+
+    # setup the push button gpio input
     GPIO.setwarnings(False) # Ignore warning for now
     GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
     GPIO.setup(self._push_button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
@@ -36,7 +44,7 @@ class BestFriendLight(object):
       self.check_for_new_color()
 
   def check_for_new_color(self):
-    pass
+    current_color_index = self._color_repository.get_current_color()
 
   def check_for_user_input(self):
     # first check if we changed the color
